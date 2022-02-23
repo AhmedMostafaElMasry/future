@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import CarItem from "../CarItem";
 import "./styles.css";
@@ -21,6 +22,8 @@ export default function FutureCars() {
       newState[inputName] = !prevState[inputName];
       return newState;
     });
+  };
+  useEffect(() => {
     if (
       checked.product1 === true ||
       checked.product2 === true ||
@@ -33,9 +36,12 @@ export default function FutureCars() {
       checked.product9 === true
     ) {
       setApply(true);
+    } else {
+      setApply(false);
     }
-  };
+  }, [checked]);
   const resetAll = () => {
+    setApply(false);
     setChecked((prevState) => {
       const newState = { ...prevState };
       for (const inputName in newState) {
@@ -44,53 +50,57 @@ export default function FutureCars() {
       return newState;
     });
   };
-  const [cars, setCars] = useState([
+  const cars = [
     {
       id: 1,
       name: "Volkeswagen",
-      check: false,
+      check: checked.product1,
     },
     {
       id: 2,
       name: "BMW",
-      check: false,
+      check: checked.product2,
     },
     {
       id: 3,
       name: "Toyota",
-      check: false,
+      check: checked.product3,
     },
     {
       id: 4,
       name: "Nissan",
-      check: false,
+      check: checked.product4,
     },
     {
       id: 5,
       name: "Genral Motors",
-      check: false,
+      check: checked.product5,
     },
     {
       id: 6,
       name: "Hyundai",
-      check: false,
+      check: checked.product6,
     },
     {
       id: 7,
       name: "Peugeot",
-      check: false,
+      check: checked.product7,
     },
     {
       id: 8,
       name: "Kia",
-      check: false,
+      check: checked.product8,
     },
     {
       id: 9,
       name: "Volvo",
-      check: false,
+      check: checked.product9,
     },
-  ]);
+  ];
+  const handleApply = () => {
+    cars.sort((a, b) => b.check - a.check);
+    console.log(cars);
+  };
   return (
     <div className="container">
       <div className="header">
@@ -98,7 +108,11 @@ export default function FutureCars() {
           RESET
         </button>
         <h1>Future Cars</h1>
-        {apply ? <button className="listBtn">Apply Changes</button> : null}
+        {apply ? (
+          <button onClick={handleApply} className="listBtn">
+            Apply Changes
+          </button>
+        ) : null}
       </div>
       <ul className="list">
         {cars.map((car) => (
