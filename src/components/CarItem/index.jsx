@@ -1,6 +1,6 @@
 import "./styles.css";
 
-export default function CarItem({ car, checked, toggleCheck }) {
+export default function CarItem({ car, index, handleChange }) {
   return (
     <li>
       <div className="item">
@@ -8,8 +8,8 @@ export default function CarItem({ car, checked, toggleCheck }) {
           type="checkbox"
           id={car.name}
           className="checkbox"
-          checked={checked[`product${car.id}`]}
-          onChange={() => toggleCheck(`product${car.id}`)}
+          checked={car.check}
+          onChange={handleChange(index)}
         />
         <label htmlFor={car.name} className="itemName">
           {car.name}

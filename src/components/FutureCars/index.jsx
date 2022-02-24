@@ -5,101 +5,80 @@ import "./styles.css";
 
 export default function FutureCars() {
   const [apply, setApply] = useState(false);
-  const [checked, setChecked] = useState({
-    product1: false,
-    product2: false,
-    product3: false,
-    product4: false,
-    product5: false,
-    product6: false,
-    product7: false,
-    product8: false,
-    product9: false,
-  });
-  const toggleCheck = (inputName) => {
-    setChecked((prevState) => {
-      const newState = { ...prevState };
-      newState[inputName] = !prevState[inputName];
-      return newState;
-    });
-  };
-  useEffect(() => {
-    if (
-      checked.product1 === true ||
-      checked.product2 === true ||
-      checked.product3 === true ||
-      checked.product4 === true ||
-      checked.product5 === true ||
-      checked.product6 === true ||
-      checked.product7 === true ||
-      checked.product8 === true ||
-      checked.product9 === true
-    ) {
-      setApply(true);
-    } else {
-      setApply(false);
-    }
-  }, [checked]);
-  const resetAll = () => {
-    setApply(false);
-    setChecked((prevState) => {
-      const newState = { ...prevState };
-      for (const inputName in newState) {
-        newState[inputName] = false;
-      }
-      return newState;
-    });
-  };
-  const cars = [
+  const [cars, setCars] = useState([
     {
       id: 1,
       name: "Volkeswagen",
-      check: checked.product1,
+      check: false,
     },
     {
       id: 2,
       name: "BMW",
-      check: checked.product2,
+      check: false,
     },
     {
       id: 3,
       name: "Toyota",
-      check: checked.product3,
+      check: false,
     },
     {
       id: 4,
       name: "Nissan",
-      check: checked.product4,
+      check: false,
     },
     {
       id: 5,
       name: "Genral Motors",
-      check: checked.product5,
+      check: false,
     },
     {
       id: 6,
       name: "Hyundai",
-      check: checked.product6,
+      check: false,
     },
     {
       id: 7,
       name: "Peugeot",
-      check: checked.product7,
+      check: false,
     },
     {
       id: 8,
       name: "Kia",
-      check: checked.product8,
+      check: false,
     },
     {
       id: 9,
       name: "Volvo",
-      check: checked.product9,
+      check: false,
     },
-  ];
+  ]);
+  const handleChange = (index) => (e) => {
+    let newCars = [...cars];
+    newCars[index].check = e.target.checked;
+    setCars(newCars);
+  };
+  const resetAll = () => {
+    setApply(false);
+    setCars((prevState) => {
+      const newState = [...prevState];
+      for (const inputName in newState) {
+        newState[inputName].check = false;
+      }
+      return newState;
+    });
+  };
+  useEffect(() => {
+    let newCars = [...cars];
+    for (const inputName in newCars) {
+      if (newCars[inputName].check === true) {
+        setApply(true);
+      }
+    }
+  }, [cars]);
+
   const handleApply = () => {
-    cars.sort((a, b) => b.check - a.check);
-    console.log(cars);
+    let newCars = [...cars];
+    setCars(newCars.sort((a, b) => b.check - a.check));
   };
   return (
     <div className="container">
@@ -115,12 +94,12 @@ export default function FutureCars() {
         ) : null}
       </div>
       <ul className="list">
-        {cars.map((car) => (
+        {cars.map((car, index) => (
           <CarItem
             key={car.id}
             car={car}
-            checked={checked}
-            toggleCheck={toggleCheck}
+            index={index}
+            handleChange={handleChange}
           />
         ))}
       </ul>
